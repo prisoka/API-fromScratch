@@ -94,4 +94,24 @@ router.put('/:id', function(req, res, next) {
   })
 })
 
+// delete one todo
+router.delete('/:id', function(req, res, next) {
+  // client req to delete one todo
+  const id = req.params.id;
+  // if id found server deletes and response success
+  knex('todo')
+  .where('id', id)
+  .del()
+  .then(() => {
+    console.log('deleted');
+    res.status(200).send();
+  })
+  // if id not found server response 404 not found
+  // if db fails server response 500
+  .catch((err) => {
+    console.log(err)
+    res.status(500).send({error: {message: 'Something went wrong!'}});
+  })
+});
+
 module.exports = router;
