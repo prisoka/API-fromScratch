@@ -43,4 +43,27 @@ router.get('/:id', function(req, res, next) {
   })
 });
 
+// create one
+router.post('/', function(req, res, next) {
+  // client req a new
+  // authorization (could actually be in any/all router)
+  // server collects information
+  const newTodo = {
+      title: req.body.title,
+      priority: req.body.priority,
+      date: new Date()
+  }
+  // if all good, server send information to DB
+  knex('todo')
+  .insert(newTodo)
+  .then((id) => {
+    // if created, server response with 202
+    res.status(202).send({ message: 'Created!' })
+  })
+  // if not able to be stored in DB server send 500 - Internal Server Error
+  .catch((err) => {
+    res.status(500).send({error: {message: 'Something went wrong!'}});
+  })
+});
+
 module.exports = router;
