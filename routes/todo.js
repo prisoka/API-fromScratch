@@ -9,10 +9,11 @@ router.get('/', function(req, res, next) {
   // the client req all
   // the server get all from db
   knex('todo')
-  .then((data) => {
-    // console.log('data', data);
+  .then((todos) => {
+    // console.log('todos', todos);
     // response all & if not found, send empty arr
-    res.status(200).send(data); // 200 = ok
+    res.render('alltodos', { todos: todos })
+    // res.status(200).send(todos); // 200 = ok
   })
   .catch((err) => {
     console.log('err', err);
