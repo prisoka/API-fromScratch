@@ -66,4 +66,32 @@ router.post('/', function(req, res, next) {
   })
 });
 
+// update one todo
+router.put('/:id', function(req, res, next) {
+  // client req one item to update
+  const id = req.params.id;
+  const priority = req.body.priority;
+  knex('todo')
+  .where('id', id)
+  .then((data) => {
+    // if input ok, server searchs for id in DB and update that id's records
+    if(data.length > 0){
+      knex('todo')
+      .where('id', id)
+      .update({
+        priority: priority
+      })
+      .then((updateResult) => {
+        res.send(updateResult[0])
+      })
+    } else {
+      res.status(404).send({error: {message: 'Not Found!'}})
+    }
+  })
+  // if not able to be stored in DB server send 500 - Internal Server Error
+  .catch((err) => {
+    res.status(500).send({error: {message: 'Something went wrong!'}})
+  })
+})
+
 module.exports = router;
